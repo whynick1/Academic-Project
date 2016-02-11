@@ -44,7 +44,7 @@ public class PostPruning {
 			if (betterAccuracy(copyDTree))
 				bestDTree = copyDTree;
 		}
-		System.out.println("The best accuracy after Post Purning is: " + accuracy);
+		System.out.println("The best accuracy after Post Pruning is: " + accuracy);
 	}
 	
 	private boolean betterAccuracy(Node nodeCopy) {
@@ -52,10 +52,9 @@ public class PostPruning {
 		ID3.root = nodeCopy;
 		//produce predicted result of vali_set.csv
 		List<Boolean> predictions = id3.classify(valiLookUpTable);
-		ID3.PrintTree(ID3.root, 0);
+//		ID3.PrintTree(ID3.root, 0);
 		double newAccuracy = id3.computeAccuracy(predictions, valiLookUpTable);
-		System.out.println("Acurracy with Post Pruning algorithm is: "
-				+ newAccuracy);
+//		System.out.println("Acurracy with Post Pruning algorithm is: " + newAccuracy);
 		if (newAccuracy > this.accuracy)
 		{
 			System.out.println("find better DTree with accuracy = " + newAccuracy);

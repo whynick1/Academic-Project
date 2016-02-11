@@ -12,8 +12,24 @@ public class ID3 {
 	static Node root;
 	static String[] attributeList = {"XB", "XC", "XD", "XE", "XF", "XG", "XH", "XI", "XJ", "XK", 
 			"XL", "XM", "XN", "XO", "XP", "XQ", "XR", "XS", "XT", "XU"};
-	public static void main(String args[])
+	public static void main(String args[]) throws Exception
 	{
+		//read input arguments
+		int L, K;
+		String training_set, test_set, validation_set;
+		String toPrint;
+		if(args.length == 6) {
+			L = Integer.parseInt(args[0]);
+			K = Integer.parseInt(args[1]);
+			training_set = args[2];
+			test_set = args[3];
+			validation_set = args[4];
+			toPrint = args[5];
+		}
+		else
+			throw new Exception("\ncheck your input parameters syntax:\n"
+					+ "java -jar program.jar <L> <K> <training-set> <validation-set> <test-set> <to-print>");
+		
 		//look up table for training_set_csv
 		List<ArrayList<Boolean>> lookUpTable = new ArrayList<ArrayList<Boolean>>();
 		//look up table for test_set.csv
@@ -21,9 +37,9 @@ public class ID3 {
 		//look up table for validation_set.csv
 		List<ArrayList<Boolean>> valiLookUpTable = new ArrayList<ArrayList<Boolean>>();
 		
-		lookUpTable = loadSet("training_set.csv", lookUpTable);
-		testLookUpTable = loadSet("test_set.csv", testLookUpTable);
-		valiLookUpTable = loadSet("validation_set.csv", valiLookUpTable);
+		lookUpTable = loadSet(training_set, lookUpTable);
+		testLookUpTable = loadSet(test_set, testLookUpTable);
+		valiLookUpTable = loadSet(validation_set, valiLookUpTable);
 		
 		
 		ID3 id3 = new ID3();
@@ -34,13 +50,16 @@ public class ID3 {
 		//produce predicted result of test_set.csv
 		List<Boolean> predictions = id3.classify(testLookUpTable);
 		//print accuracy
-		System.out.println("############ Print decision tree ############");
-		PrintTree(root, 0);
+		if (toPrint.equals("yes"))
+		{
+			System.out.println("############ Print decision tree ############");
+			PrintTree(root, 0);
+		}
 		double accuracy = id3.computeAccuracy(predictions, testLookUpTable);
-		System.out.println("Acurracy with ID3 algorithm is: "
+		System.out.println("Accuracy with ID3 algorithm is: "
 				+ accuracy);
 		//parameters in form of (root, attribute_number, L, K)
-		PostPruning pp = new PostPruning(root, 20, 9, 9, valiLookUpTable, accuracy);
+		PostPruning pp = new PostPruning(root, ATTRIBUTE_NUMBER, L, K, valiLookUpTable, accuracy);
 		pp.pruning(root);
 //		PrintTree(pp.copyDTree, 0);//test if pp.copy() successful
 	}

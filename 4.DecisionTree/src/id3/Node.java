@@ -17,7 +17,6 @@ public class Node {
     {
         this.parent = parent;
         children = new Node[2];
-
         this.lookUpTable = lookUpTable;
         this.predictedLabel = predictedLable;//-1 means non-leaf node
         this.attributeName = -1; //-1 means the attribute index has not been set yet

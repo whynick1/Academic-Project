@@ -1,11 +1,9 @@
 package id3;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
 
 
 public class ID3 {
@@ -20,9 +18,13 @@ public class ID3 {
 		List<ArrayList<Boolean>> lookUpTable = new ArrayList<ArrayList<Boolean>>();
 		//look up table for test_set.csv
 		List<ArrayList<Boolean>> testLookUpTable = new ArrayList<ArrayList<Boolean>>();
+		//look up table for validation_set.csv
+		List<ArrayList<Boolean>> valiLookUpTable = new ArrayList<ArrayList<Boolean>>();
 		
 		lookUpTable = loadSet("training_set.csv", lookUpTable);
 		testLookUpTable = loadSet("test_set.csv", testLookUpTable);
+		valiLookUpTable = loadSet("validation_set.csv", valiLookUpTable);
+		
 		
 		ID3 id3 = new ID3();
 		//Machine learning process, build DTree
@@ -34,8 +36,13 @@ public class ID3 {
 		//print accuracy
 		System.out.println("############ Print decision tree ############");
 		PrintTree(root, 0);
+		double accuracy = id3.computeAccuracy(predictions, testLookUpTable);
 		System.out.println("Acurracy with ID3 algorithm is: "
-				+ id3.computeAccuracy(predictions, testLookUpTable));
+				+ accuracy);
+		//parameters in form of (root, attribute_number, L, K)
+		PostPruning pp = new PostPruning(root, 20, 9, 9, valiLookUpTable, accuracy);
+		pp.pruning(root);
+//		PrintTree(pp.copyDTree, 0);//test if pp.copy() successful
 	}
 
 

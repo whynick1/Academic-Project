@@ -1,0 +1,8 @@
+1. enter spark dirctory: cd spark-2.0.0-bin-hadoop2.7/bin
+2. execute spark: ./spark-shell
+
+3. For problem2, run each line of P2.txt
+4. For problem3, run each line of P3.txt
+5. For problem4, run each line of P4.txt
+
+Problem3val user1 = readLine("Please Enter First User ID : ")val user2 = readLine("Please Enter Second User ID: ")val input = sc.textFile("/Users/wanghongyi/Applications/spark-2.0.0-bin-hadoop2.7/data/commonFriends/soc-LiveJournal1Adj.txt")val friendOfUser1 = input.map(li=>li.split("\\t")).filter(l1 => (l1.size == 2)).filter(li=>(user2==li(0))).flatMap(li=>li(1).split(","))val friendOfUser2 = input.map(li=>li.split("\\t")).filter(l1 => (l1.size == 2)).filter(li=>(user1==li(0))).flatMap(li=>li(1).split(","))val common = friendOfUser2.intersection(friendOfUser1).collect()val input2 = sc.textFile("/Users/wanghongyi/Applications/spark-2.0.0-bin-hadoop2.7/data/commonFriends/userdata.txt")val detail = input2.map(li=>li.split(",")).filter(li=>common.contains(li(0))).map(li=>(li(0)+":"+li(1)))val result=user1+" "+user2+"\t["+detail.collect.mkString(",")+"]"

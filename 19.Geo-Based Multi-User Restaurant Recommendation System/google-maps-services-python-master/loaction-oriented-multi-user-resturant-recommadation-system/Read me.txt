@@ -1,0 +1,9 @@
+# install Pillow to enable static google map in Python
+sudu pip install Pillow
+
+# display user and resturant locations on map
+python dirctions.py [user2Id] [coordinate1] [user2Id] [coordinate2] ……
+
+(python directions.py GNK9jkkQ6G
+PxTYvviHvrjA 36.166898,-115.187672 zaFA61Mf-k4Mbh5CKdwthA 36.154405,-115.149747
+ aJGbFSkf6zCBbadpcD5uow 36.169364,-115.149684 )

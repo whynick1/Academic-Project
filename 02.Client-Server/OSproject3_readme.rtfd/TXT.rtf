@@ -1,0 +1,153 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf130
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green68\blue254;\red255\green0\blue0;\red0\green0\blue0;
+\red100\green100\blue100;\red127\green0\blue85;\red106\green62\blue62;\red0\green0\blue192;\red42\green0\blue255;
+}
+\margl1440\margr1440\vieww14160\viewh18000\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 {{\NeXTGraphic Screen Shot 2015-12-05 at 12.06.05.png \width7440 \height7900
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+//////////////////////////////////////////////////////////////////////\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 // 
+\b \cf2 Package: datastoreClient
+\b0 \cf0 \
+//////////////////////////////////////////////////////////////////////\
+
+\b Class ClientException
+\b0  (given by professor)\
+1. define ClientException class extend Exception\
+2. call super in constructor (using Exception\'92s constructor)\
+\
+
+\b Interface DatastoreClient
+\b0  (given)\
+1. declare \'93read\'94, \'93write\'94, \'93delete\'94, \'93directory\'94 method must be implemented\
+\
+
+\b Class DatastoreClientlmpl
+\b0  \cf3 (implement 4 methods above)\cf0 \
+1. Constructor will initiate global variable: socket address and port\
+2. Using socket to request connection from server.\
+3. in each method, put write/read/delete/directory command info to socket.outputstream(command protocol provided by professor)\
+4. read the respond info from server\
+4.1 to make sure if communication succeed\
+4.2 or to retrieve required info (like for read command)\
+4.3 using StreamUtil.writeLine/readLine/writeData/readData method to read/write to and from stream\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 //////////////////////////////////////////////////////////////////////\
+// 
+\b \cf2 Package: datastoreServer
+\b0 \cf0 \
+//////////////////////////////////////////////////////////////////////\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 Class dataStoreServer
+\b0  \cf3 (implement dispatchCommand method)\cf0 \
+1.1. contain main() for server.\
+1.2. After startup, forever wait for client request\
+2.1. dispatchCommand simply read the first line of stream using StreamUil.readline()\
+2.2. if it is \'93write\'94, return new WriteCommand();\
+\
+\
+//////////////////////////////////////////////////////////////////////\
+// 
+\b \cf2 Package: datastoreServer.commands
+\b0 \cf0 \
+//////////////////////////////////////////////////////////////////////\
+\
+
+\b Class ServerCommand (given)
+\b0 \
+1. abstract class contain setInputStream(), setOutputStream(), sentOK()\'85\
+2. contain abstract method void run() must be overrides.\
+\
+
+\b Class WriteCommand
+\b0  \cf3 (implement run())\cf0 \
+1. read write command info from stream using StreamUtil and FileUtil(read byte[] data)\
+2. use FileUtil.writeData to write data to a file and give the file a name.\
+\
+
+\b Class ReadCommand
+\b0  \cf3 (implement run())\
+
+\b \cf0 Class DeleteCommand
+\b0  \cf3 (implement run())\
+
+\b \cf0 Class DirectoryCommand
+\b0  \cf3 (implement run())\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf4 1. same as WirteCommand.run(), only different in \'93respond\'94 outputStream\
+\cf0 \
+\
+//////////////////////////////////////////////////////////////////////\
+// 
+\b \cf2 Package: utils
+\b0 \cf0 \
+//////////////////////////////////////////////////////////////////////\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 Class FileUtil (given)\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf0 1. read/write/deleteData(filename), List<String> directory()
+\b \
+Class StreamUtil (given)\
+
+\b0 1. read/writeData(length, input stream), readWriteLine(), sentError()
+\b \
+\
+\
+
+\b0 //////////////////////////////////////////////////////////////////////\
+// 
+\b \cf2 TestCase
+\b0 \cf0 \
+//////////////////////////////////////////////////////////////////////
+\b \
+Class DatastoreClientTestCase (given)
+\f1\b0\fs22 \
+1. @Test example\
+\pard\pardeftab720\partightenfactor0
+\cf0 	\cf5 @Test\cf0 \
+	\cf6 public\cf0  \cf6 void\cf0  testWrite() \cf6 throws\cf0  Exception\
+	\{\
+		InetAddress \cf7 address\cf0  = InetAddress.getByAddress(\cf8 byteAddr\cf0 );\
+		DatastoreClient \cf7 dsClient\cf0  = \cf6 new\cf0  DatastoreClientImpl(\cf7 address\cf0 , \cf8 port\cf0 );\
+\
+		\cf6 byte\cf0  \cf7 data\cf0 [] = generateData(100);\
+		\cf7 dsClient\cf0 .write(\cf9 "testData"\cf0 , \cf7 data\cf0 );\
+	\}\
+\
+2. the other @Test are similar.
+\f0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+}
